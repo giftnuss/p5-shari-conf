@@ -194,7 +194,7 @@ Shari::Conf - Extensible Configuration System
 =head1 DESCRIPTION
 
 This module is an modified fork of Gantry::Conf. The behaviour is
-similar, but not all features are included from orinal. It
+similar, but not all features are included from original. It
 uses only one config loader - Config::General. But it is possible
 to add more.
 
@@ -209,7 +209,7 @@ Nothing special here, this method creates an object.
 =item register_config_provider($name, $action)
 
 This method adds or overwrites an entry in the dispatch table. The
-second parameter is an called like a usual method, with $self as
+second parameter is called like a usual method, with $self as
 first argument. The other aruments are arbitrary.
 
 =item load_main_config( $options_hash )
@@ -230,22 +230,13 @@ must match an entry in the configuration file.
 
 =item config_file => '/path/to/file.conf'
 
-By default Gantry::Conf looks at the file /etc/gantry.conf for its
-bootstrapping information.  This option allows you to override this default
-behavior and have the system reference any file you desire.  Note the file
-still must conform to the syntax of the main gantry.conf.
-
 =back
 
 =back
 
 =head1 SEE ALSO
 
-Gantry(3), Gantry::Conf::Tutorial(3), Ganty::Conf::FAQ(3)
-
-=head1 LIMITATIONS
-
-Currently this system only works on Unix-like systems.
+Gantry::Conf(3), Gantry::Conf::Tutorial(3), Ganty::Conf::FAQ(3)
 
 =head1 AUTHOR
 
