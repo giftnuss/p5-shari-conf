@@ -14,7 +14,7 @@
 ; my %dispatch;
 ; my $C = __PACKAGE__
 
-# Aktion die für die erste geladene Konfiguration genutzt weden kann.
+# Ene Aktion die für die erste geladene Konfiguration genutzt werden kann.
 ; my $default_post_load = sub
     { my ($self,$instance) = @_
     ; my %config = %{$self->{'__config__'}}
@@ -210,16 +210,20 @@ Nothing special here, this method creates an object.
 
 This method adds or overwrites an entry in the dispatch table. The
 second parameter is called like a usual method, with $self as
-first argument. The other aruments are arbitrary.
+first argument. The other arguments are arbitrary.
 
-=item load_main_config( $options_hash )
+=item load_main_config( $options_hash , @optional_args )
 
-The retrieve method is the only method your application should call. It
-takes a hash of arguments.  All other methods defined in this module are
-considered internal and their interfaces may change at any time, you
-have been warned. The possible arguments are:
+This method is most common use case for this module. First argument
+is a hashref, which defines behavior of the method. 
+The possible arguments are:
 
 =over 4
+
+=item provider => 'provider_name'
+
+The value is a name which was registered with register_config_provider.
+The usual default is 'Config::General'.
 
 =item instance => 'foo'
 
