@@ -10,9 +10,12 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Shari/Conf.pm',
     build_requires => {
         'Test::More' => 0,
+	'Module::Build' => '0.40'
     },
     requires => {
         'perl' => 5.006,
+	'Config::General' => 0,
+	'Hash::Merge' => 0
     },
     add_to_cleanup      => [ 'Shari-Conf-*' ],
     create_makefile_pl => 'traditional',
