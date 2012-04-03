@@ -6,9 +6,9 @@ MANIFEST			This list of files
 README
 t/00-load.t
 t/01-dsl.t
-t/boilerplate.t
 t/data/dsl-einstein.conf
 t/data/dsl.conf
-t/manifest.t
-t/pod-coverage.t
-t/pod.t
+xt/boilerplate.t
+xt/manifest.t
+xt/pod-coverage.t
+xt/pod.t
