@@ -10,7 +10,9 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Shari/Conf.pm',
     build_requires => {
         'Test::More' => 0,
-	'Module::Build' => '0.40'
+	'Module::Build' => '0.40',
+        'Test::Requires' => 0,
+        'IO::String' => 0
     },
     requires => {
         'perl' => 5.006,
