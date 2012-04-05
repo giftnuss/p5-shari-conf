@@ -2,12 +2,17 @@ Build.PL
 Changes
 ignore.txt
 lib/Shari/Conf.pm
+Makefile.PL
 MANIFEST			This list of files
+META.json
+META.yml
 README
 t/00-load.t
 t/01-dsl.t
+t/02_yaml_conf.t
 t/data/dsl-einstein.conf
 t/data/dsl.conf
+t/data/yaml.conf
 xt/boilerplate.t
 xt/manifest.t
 xt/pod-coverage.t

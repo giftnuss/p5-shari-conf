@@ -1,8 +1,8 @@
-  package Shari::Conf
-# *******************
-; $Shari::Conf::VERSION='0.02'
+  package Shari::Conf;
+# ********************
 # ABSTRACT: Abstract Configuration Source derived from Gantry::Conf
-; use strict; use warnings; use utf8
+use strict; use warnings; use utf8;
+$Shari::Conf::VERSION='0.02';
 
 ; use Carp ()
 ; use Config::General ()
@@ -72,6 +72,19 @@
     ; $self->{'__config_dir__'}
     }
 
+; sub get_config_file
+    { my ($self,$file) = @_
+    ; File::Spec->catfile($self->get_config_dir,$file)
+    }
+
+; sub slurp_config_file
+    { my ($self,$file) = @_;
+    ; open( my $fh, '<', $self->get_config_file($file) )
+          or Carp::croak("Can not open file '$file': $!");
+    ; local $/;
+    ; <$fh>
+    }
+
 ; sub array_option
     { my ($self,$ref,@default) = @_
     ; my @config_statements
@@ -129,19 +142,24 @@
 
 ; sub load_main_config
     { my ($self,$params,@args) = @_
+    ; $self = $self->new unless ref $self
     ; $self->{'__config__'} = {}
 
     ; my $provider = $params->{'provider'} || 'Config::General'
 
     ; Carp::croak "ERROR: No instance given to load_main_config()"
         unless ( $params->{'instance'} )
-    ; Carp::croak "ERROR: No config file given to load_main_config()"
-        unless ( $params->{'config_file'} )
 
-    ; my $dir = File::Basename::dirname($params->{'config_file'})
-    ; my $file = File::Basename::basename($params->{'config_file'})
-    ; $self->set_config_dir($dir)
-    ; $self->load_configuration($provider, $file, @args)
+    ; my $configfile = $params->{'config_file'}
+    ; Carp::croak "ERROR: No config file given to load_main_config()"
+        unless $configfile
+
+    ; unless(ref $configfile)
+        { my $dir = File::Basename::dirname($configfile)
+        ; $configfile = File::Basename::basename($configfile)
+        ; $self->set_config_dir($dir)
+        }
+    ; $self->load_configuration($provider, $configfile, @args)
     ; $self->run_apply_action($params->{'instance'})
 
     # Return our configuration
@@ -198,7 +216,7 @@ similar, but not all features are included from original. It
 uses only one config loader - Config::General. But it is possible
 to add more.
 
-=head1 CLASS METHODS
+=head2 CLASS METHODS
 
 =over 4
 
@@ -212,11 +230,19 @@ This method adds or overwrites an entry in the dispatch table. The
 second parameter is called like a usual method, with $self as
 first argument. The other arguments are arbitrary.
 
+=back
+
+=head2 OPTIONAL CLASS METHOD
+
+=over 4
+
 =item load_main_config( $options_hash , @optional_args )
 
-This method is most common use case for this module. First argument
-is a hashref, which defines behavior of the method. 
-The possible arguments are:
+This method is loads the confiuration and returns the loaded
+configuration data as a hash reference. The first argument
+is a hashref, which defines behavior of the method.
+
+The possible keys in this hashref are:
 
 =over 4
 
@@ -236,7 +262,14 @@ must match an entry in the configuration file.
 
 =back
 
+All following parameters are used as argument list for the
+L<load_configuration> method.
+
 =back
+
+=head2 OBJECT METHODS
+
+
 
 =head1 SEE ALSO
 
@@ -252,7 +285,7 @@ Shari::Conf development running by Sebastian Knapp <rock@ccls-online.de>
 
 Copyright (c) 2006, Frank Wiles.
 
-Copyright (c) 2011 Sebastian Knapp
+Copyright (c) 2011-2012 Sebastian Knapp
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.6 or,

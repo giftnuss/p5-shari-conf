@@ -1,7 +1,7 @@
 #!perl -T
 
 use strict; use warnings;
-use Test::More tests => 2;
+use Test::More tests => 6;
 
 BEGIN {
     use_ok( 'Shari::Conf' ) || print "Bail out!\n";
@@ -21,3 +21,4 @@ is($config->{'namespace'},'DSL');
 
 is($config->{'i18n'}->{'use'},'de');
 is_deeply($config->{'i18n'}->{'language'},['DE','EN']);
+
