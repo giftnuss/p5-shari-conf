@@ -18,7 +18,8 @@ $Shari::Conf::VERSION='0.02';
 ; my $default_post_load = sub
     { my ($self,$instance) = @_
     ; my %config = %{$self->{'__config__'}}
-    ; $self->{'__config__'} = {}
+    ; my %defaults = %{($config{'shared'} || {})->{'defaults'} || {}}
+    ; $self->{'__config__'} = \%defaults
     ; my $instance_ref = $config{'instance'}->{$instance}
 
     ; my @configure_via =
