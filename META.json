@@ -1,0 +1,51 @@
+{
+   "abstract" : "Extensible Configuration System",
+   "author" : [
+      "Sebastian Knapp <sk@computer-leipzig.com>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.4, CPAN::Meta::Converter version 2.112150",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Shari-Conf",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "IO::String" : 0,
+            "Module::Build" : "0.40",
+            "Test::More" : 0,
+            "Test::Requires" : 0
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.4"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Config::General" : 0,
+            "Hash::Merge" : 0,
+            "perl" : "5.006"
+         }
+      }
+   },
+   "provides" : {
+      "Shari::Conf" : {
+         "file" : "lib/Shari/Conf.pm",
+         "version" : "0.02"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ]
+   },
+   "version" : "0.02"
+}
