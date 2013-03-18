@@ -8,6 +8,9 @@ my $builder = Module::Build->new(
     license             => 'perl',
     dist_author         => q{Sebastian Knapp <sk@computer-leipzig.com>},
     dist_version_from   => 'lib/Shari/Conf.pm',
+    configure_requires => {
+	'Module::Build' => 0.4 
+    },
     build_requires => {
         'Test::More' => 0,
 	'Module::Build' => '0.40',

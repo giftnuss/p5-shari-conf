@@ -15,11 +15,10 @@ $Shari::Conf::VERSION='0.02';
 ; my $C = __PACKAGE__
 
 # Ene Aktion die für die erste geladene Konfiguration genutzt werden kann.
-; my $default_post_load = sub
+; sub _default_post_load
     { my ($self,$instance) = @_
     ; my %config = %{$self->{'__config__'}}
-    ; my %defaults = %{($config{'shared'} || {})->{'defaults'} || {}}
-    ; $self->{'__config__'} = \%defaults
+    ; $self->{'__config__'} = {}
     ; my $instance_ref = $config{'instance'}->{$instance}
 
     ; my @configure_via =
@@ -38,7 +37,7 @@ $Shari::Conf::VERSION='0.02';
     { my $class = shift
     ; my $self = {
         __config__ => {},
-        __apply__ => $default_post_load
+        __apply__ => \&_default_post_load
     }
 
     ; return bless( $self, $class )
