@@ -2,9 +2,10 @@
 # ********************
 # ABSTRACT: Abstract Configuration Source derived from Gantry::Conf
 use strict; use warnings; use utf8;
-$Shari::Conf::VERSION='0.02';
+$Shari::Conf::VERSION='0.03';
 
 ; use Carp ()
+; use Capture::Tiny ()
 ; use Config::General ()
 ; use Hash::Merge ()
 ; use File::Basename ()
@@ -135,9 +136,11 @@ $Shari::Conf::VERSION='0.02';
 
 ; sub merge_config
     { my ($self,$conf) = @_
-    ; my $merge = Hash::Merge->new('LEFT_PRECEDENT');
-    ; $merge->set_clone_behavior(0);
-    ; $self->{'__config__'} = $merge->merge($self->{'__config__'},$conf)
+    ; my $merge = Hash::Merge->new('LEFT_PRECEDENT')
+    ; $merge->set_clone_behavior(0)
+    ; Capture::Tiny::capture {
+      ; $self->{'__config__'} = $merge->merge($self->{'__config__'},$conf)
+      }
     }
 
 ; sub load_main_config
