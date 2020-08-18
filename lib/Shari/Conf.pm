@@ -2,14 +2,14 @@
 # ********************
 # ABSTRACT: Abstract Configuration Source derived from Gantry::Conf
 use strict; use warnings; use utf8;
-$Shari::Conf::VERSION='0.03';
+$Shari::Conf::VERSION='0.04';
 
 ; use Carp ()
 ; use Capture::Tiny ()
 ; use Config::General ()
 ; use Hash::Merge ()
 ; use File::Basename ()
-; use File::Spec ()
+; use Path::Tiny ()
 
 # Dispatch table
 ; my %dispatch;
@@ -75,7 +75,7 @@ $Shari::Conf::VERSION='0.03';
 
 ; sub get_config_file
     { my ($self,$file) = @_
-    ; File::Spec->catfile($self->get_config_dir,$file)
+    ; "" . Path::Tiny::path($self->get_config_dir)->child($file)
     }
 
 ; sub slurp_config_file
@@ -105,9 +105,8 @@ $Shari::Conf::VERSION='0.03';
 ; $C->register_config_provider(
     'Config::General' => sub
         { my ($self,$filename) = @_
-        ; my $config = File::Spec->catfile(
-             $self->get_config_dir, $filename)
-        ; my $cfg = $self->config_general(-ConfigFile =>  $config)
+        ; my $config = Path::Tiny::path($self->get_config_dir)->child($filename)
+        ; my $cfg = $self->config_general(-ConfigFile => "$config")
         ; $self->merge_config({$cfg->getall})
         })
 
