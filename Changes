@@ -1,6 +1,8 @@
 Revision history for Shari-Conf
 
 0.10    2020-08-27
+    rename config_file parameter to source
+    introduce source type parameter
 
 0.04    2020-08-18
     use Path::Tiny not File::Spec
