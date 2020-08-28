@@ -12,10 +12,11 @@ my $builder = Module::Build->new(
 	    'Module::Build' => 0.4 
     },
     build_requires => {
+        'Path::Tiny' => 0,
+        'Test2::Suite' => 0,
         'Test::More' => 0,
 	    'Module::Build' => '0.40',
-        'Test::Requires' => 0,
-        'IO::String' => 0
+        'Test::Requires' => 0
     },
     requires => {
         'perl' => 5.006,

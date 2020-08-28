@@ -2,7 +2,7 @@
 # ********************
 # ABSTRACT: Abstract Configuration Source derived from Gantry::Conf
 use strict; use warnings; use utf8;
-$Shari::Conf::VERSION='0.04';
+$Shari::Conf::VERSION='0.10';
 
 ; use Carp ()
 ; use Capture::Tiny ()
@@ -10,6 +10,12 @@ $Shari::Conf::VERSION='0.04';
 ; use Hash::Merge ()
 ; use File::Basename ()
 ; use Path::Tiny ()
+
+# Config source types
+; use constant TEXT => 'TEXT';
+; use constant FILE => 'FILE';
+; use constant FILEHANDLE => 'FH';
+; use constant COMPLEX => '*';
 
 # Dispatch table
 ; my %dispatch;
@@ -73,19 +79,6 @@ $Shari::Conf::VERSION='0.04';
     ; $self->{'__config_dir__'}
     }
 
-; sub get_config_file
-    { my ($self,$file) = @_
-    ; "" . Path::Tiny::path($self->get_config_dir)->child($file)
-    }
-
-; sub slurp_config_file
-    { my ($self,$file) = @_;
-    ; open( my $fh, '<', $self->get_config_file($file) )
-          or Carp::croak("Can not open file '$file': $!");
-    ; local $/;
-    ; <$fh>
-    }
-
 ; sub array_option
     { my ($self,$ref,@default) = @_
     ; my @config_statements
@@ -104,9 +97,25 @@ $Shari::Conf::VERSION='0.04';
 
 ; $C->register_config_provider(
     'Config::General' => sub
-        { my ($self,$filename) = @_
-        ; my $config = Path::Tiny::path($self->get_config_dir)->child($filename)
-        ; my $cfg = $self->config_general(-ConfigFile => "$config")
+        { my ($self,$source,$type,@args) = @_
+        ; my $cfg;
+        ; if( !defined($type) || $type eq FILE )
+            { my $path = Path::Tiny::path($source)
+            ; unless( $self->get_config_dir )
+                { $self->set_config_dir( $path->parent->stringify )
+                }
+              else
+                { $path = Path::Tiny::path( $self->get_config_dir )->child($source)
+                }
+            ; $cfg = $self->config_general(-ConfigFile => "$path", @args)
+            }
+          elsif( $type eq TEXT )
+            { $cfg = $self->config_general(-String => $source, @args)
+            }
+          elsif( $type eq FILEHANDLE )
+            { my @lines = <$source>
+            ; $cfg = $self->config_general(-String => \@lines, @args)
+            }
         ; $self->merge_config({$cfg->getall})
         })
 
@@ -152,16 +161,13 @@ $Shari::Conf::VERSION='0.04';
     ; Carp::croak "ERROR: No instance given to load_main_config()"
         unless ( $params->{'instance'} )
 
-    ; my $configfile = $params->{'config_file'}
-    ; Carp::croak "ERROR: No config file given to load_main_config()"
-        unless $configfile
+    ; my $source = $params->{'source'}
+    ; Carp::croak "ERROR: No config source given to load_main_config()"
+        unless $source
 
-    ; unless(ref $configfile)
-        { my $dir = File::Basename::dirname($configfile)
-        ; $configfile = File::Basename::basename($configfile)
-        ; $self->set_config_dir($dir)
-        }
-    ; $self->load_configuration($provider, $configfile, @args)
+    ; my $type = $params->{'type'} || FILE;
+
+    ; $self->load_configuration($provider, $source, $type, @args)
     ; $self->run_apply_action($params->{'instance'})
 
     # Return our configuration
@@ -169,9 +175,8 @@ $Shari::Conf::VERSION='0.04';
     }
 
 ; sub load_configuration
-    { my ($self,$provider,@args) = @_
-
-    ; $self->configure_via($provider,@args)
+    { my ($self,$provider,$source,$type,@args) = @_
+    ; $self->configure_via($provider,$source,$type,@args)
     }
 
 ; 1

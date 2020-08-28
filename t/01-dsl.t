@@ -13,7 +13,7 @@ isa_ok($dsl,'Shari::Conf');
 
 my $config = $dsl->load_main_config({
       instance => 'einstein',
-      config_file => './t/data/dsl.conf'
+      source => './t/data/dsl.conf'
 });
 
 is($config->{'application_name'},'Developer Support Library');

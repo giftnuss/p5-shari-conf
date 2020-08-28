@@ -8,7 +8,7 @@ use Shari::Conf;
 
 my $config = Shari::Conf->load_main_config({
     instance => 'diode',
-    config_file => './t/data/dsl.conf'
+    source => './t/data/dsl.conf'
 });
 
 is($config->{'application_name'},'Developer Support Library','expected config data');
@@ -18,8 +18,8 @@ is($config->{'i18n'}->{'use'},'de','expected config data');
 is_deeply($config->{'i18n'}->{'language'},['DE','EN'],'expected config data');
 
 eval {
-    $config = Shari::Conf->load_main_config({
-        config_file => './t/data/dsl.conf'
+    my $config = Shari::Conf->load_main_config({
+        source => './t/data/dsl.conf'
     });
 };
 
@@ -31,6 +31,6 @@ eval {
     });
 };
 
-ok($@ =~ /No config file/,'dies without config file');
+ok($@ =~ /No config source/,'dies without config file');
 
 
